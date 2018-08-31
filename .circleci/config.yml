@@ -34,7 +34,6 @@ jobs:
             mkdir artifact
             cp sns_to_ses_mailer.py artifact
             ls -la /usr/local/lib/python2.7/site-packages/
-            sudo find / -type d -name jinja2
             cp -r /usr/local/lib/python2.7/site-packages/jinja2 artefact/
             cp -r /usr/local/lib/python2.7/site-packages/markupsafe artefact/
             cd artifact
