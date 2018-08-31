@@ -45,6 +45,7 @@ jobs:
 
       - store_artifacts:
           path: aws-sns-to-ses-mailer-0.0.1.zip
+          destination: artifacts
   publish-github-release:
       docker:
         - image: cibuilds/github:0.10
