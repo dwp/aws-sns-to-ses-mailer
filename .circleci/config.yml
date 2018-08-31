@@ -31,6 +31,8 @@ jobs:
           name: install dependencies
           command: |
             sudo pip install -r requirements.txt
+            pwd
+            ls -la
 
       - save_cache:
           paths:
