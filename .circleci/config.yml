@@ -34,6 +34,9 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             sudo pip install -r requirements.txt
+            cd venv
+            cp ../sns_to_ses_mailer.py .
+            zip -r ../aws-sns-to-ses-mailer-0.0.1.zip *
             pwd
             ls -la
 
@@ -43,5 +46,15 @@ jobs:
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - store_artifacts:
-          path: test-reports
-          destination: test-reports
+          path: aws-sns-to-ses-mailer-0.0.1.zip
+  publish-github-release:
+      docker:
+        - image: cibuilds/github:0.10
+      steps:
+        - attach_workspace:
+            at: ./artifacts
+        - run:
+            name: "Publish Release on GitHub"
+            command: |
+              VERSION=$(my-binary --version)
+              ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
