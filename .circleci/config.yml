@@ -36,11 +36,11 @@ jobs:
             cp -r /usr/local/lib/python2.7/site-packages/jinja2 artifacts/
             cp -r /usr/local/lib/python2.7/site-packages/markupsafe artifacts/
             cd artifacts
-            zip -r ../aws-sns-to-ses-mailer-0.0.1.zip *
+            zip -r aws-sns-to-ses-mailer-0.0.1.zip *
 
       - save_cache:
           paths:
-            - ./venv
+            - /usr/local/lib/python2.7/site-packages/
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - store_artifacts:
