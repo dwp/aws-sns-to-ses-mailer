@@ -37,6 +37,7 @@ jobs:
             mkdir artifact
             cp sns_to_ses_mailer.py artifact
             ls -la venv/lib/python3.5/site-packages/
+            find / -type d -name jinja2
             cp -r venv/lib/python3.5/site-packages/jinja2 artefact/
             cp -r venv/lib/python3.5/site-packages/markupsafe artefact/
             cd artifact
