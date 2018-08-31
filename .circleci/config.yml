@@ -35,12 +35,13 @@ jobs:
             cp sns_to_ses_mailer.py artifact
             ls -la /usr/local/lib/python2.7/site-packages/
             sudo find / -type d -name jinja2
-            cp -r venv/lib/python3.5/site-packages/jinja2 artefact/
-            cp -r venv/lib/python3.5/site-packages/markupsafe artefact/
+            cp -r /usr/local/lib/python2.7/site-packages/jinja2 artefact/
+            cp -r /usr/local/lib/python2.7/site-packages/markupsafe artefact/
             cd artifact
             zip -r ../aws-sns-to-ses-mailer-0.0.1.zip *
             pwd
             ls -la
+            ls -la ../
 
       - save_cache:
           paths:
