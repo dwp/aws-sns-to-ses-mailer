@@ -37,7 +37,7 @@ jobs:
             mkdir artifact
             cp sns_to_ses_mailer.py artifact
             cp -r venv/lib/python*/site-packages/jinja2 artefact/
-            cp -r venv/lib/python*/site-packages/markupsafe artefact/
+            cp -r venv/lib/python3.5/site-packages/markupsafe artefact/
             cd artifact
             zip -r ../aws-sns-to-ses-mailer-0.0.1.zip *
             pwd
