@@ -62,6 +62,6 @@ workflows:
   build-and-deploy:
     jobs:
       - build
-      - deploy:
+      - publish-github-release:
           requires:
             - build
