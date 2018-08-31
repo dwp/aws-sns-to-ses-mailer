@@ -31,11 +31,11 @@ jobs:
           name: install dependencies
           command: |
             sudo pip install -r requirements.txt
-            mkdir artifact
-            cp sns_to_ses_mailer.py artifact
-            cp -r /usr/local/lib/python2.7/site-packages/jinja2 artifact/
-            cp -r /usr/local/lib/python2.7/site-packages/markupsafe artifact/
-            cd artifact
+            mkdir artifacts
+            cp sns_to_ses_mailer.py artifacts
+            cp -r /usr/local/lib/python2.7/site-packages/jinja2 artifacts/
+            cp -r /usr/local/lib/python2.7/site-packages/markupsafe artifacts/
+            cd artifacts
             zip -r ../aws-sns-to-ses-mailer-0.0.1.zip *
 
       - save_cache:
@@ -46,6 +46,11 @@ jobs:
       - store_artifacts:
           path: aws-sns-to-ses-mailer-0.0.1.zip
           destination: artifacts
+
+      - persist_to_workspace:
+          root: artifacts
+          paths:
+            - aws-sns-to-ses-mailer-0.0.1.zip
   publish-github-release:
       docker:
         - image: cibuilds/github:0.10
