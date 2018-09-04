@@ -38,10 +38,11 @@ jobs:
             cd artifacts
             zip -r aws-sns-to-ses-mailer-0.0.1.zip *
 
-      - save_cache:
-          paths:
-            - /usr/local/lib/python2.7/site-packages/
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+#      Permission denied error, temporarily disabling cache
+#      - save_cache:
+#          paths:
+#            - /usr/local/lib/python2.7/site-packages/
+#          key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - store_artifacts:
           path: aws-sns-to-ses-mailer-0.0.1.zip
