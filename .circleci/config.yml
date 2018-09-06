@@ -42,7 +42,10 @@ jobs:
             cp -r /usr/local/lib/python2.7/site-packages/jinja2 artifacts/
             cp -r /usr/local/lib/python2.7/site-packages/markupsafe artifacts/
             cd artifacts
-            zip -r aws-sns-to-ses-mailer-0.0.1.zip *
+            LATEST_VERSION=$(curl --silent "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+            VERSION=$(echo $LATEST_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            VERSION_NUMBER=$(echo $VERSION | sed 's/^v\(.*\)$/\1/')
+            zip -r aws-sns-to-ses-mailer-$VERSION_NUMBER.zip *
 
 #      Permission denied error, temporarily disabling cache
 #      - save_cache:
