@@ -53,14 +53,10 @@ jobs:
 #            - /usr/local/lib/python2.7/site-packages/
 #          key: v1-dependencies-{{ checksum "requirements.txt" }}
 
-      - store_artifacts:
-          path: aws-sns-to-ses-mailer-0.0.1.zip
-          destination: artifacts
-
       - persist_to_workspace:
           root: artifacts
           paths:
-            - aws-sns-to-ses-mailer-0.0.1.zip
+            - aws-sns-to-ses-mailer-*.zip
   publish-github-release:
       docker:
         - image: cibuilds/github:0.10
