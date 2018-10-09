@@ -5,6 +5,7 @@ import csv
 import json
 from collections import namedtuple
 import os
+import sys
 import zlib
 import logging
 
@@ -27,8 +28,11 @@ max_threads = os.environ['MAX_THREADS']
 from_domain = os.environ['SENDING_DOMAIN']
 
 # Initialise logging
-logger = logging.getLogger()
-logger.setLevel(os.environ['LOG_LEVEL'])
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.getLevelName(os.environ['LOG_LEVEL'].upper()))
+logging.basicConfig(stream=sys.stdout,
+                    format='%(asctime)s %(levelname)s %(module)s '
+                           '%(process)s[%(thread)s] %(message)s')
 logger.info("Logging at {} level".format(os.environ['LOG_LEVEL']))
 
 # Initialise clients
