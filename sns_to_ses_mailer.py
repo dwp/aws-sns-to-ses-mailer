@@ -111,10 +111,14 @@ def lambda_handler(event, context):
         # Read the message files
         try:
             response = s3.get_object(Bucket=args['bucket'], Key=args['plain_text_template'])
-            mime_message_text = response['Body'].read()
+            mime_message_text = response['Body'].read().decode("utf-8")
+            if args['template_variables']:
+                t = Template(mime_message_text)
+                mime_message_text = t.render(args['template_variables'])
             t = Template(mime_message_text)
             mime_message_text = t.render(something="World")
-        except:
+        except Exception as e:
+            logger.info(e)
             mime_message_text = None
             logger.info('Failed to read text message file. Did you upload %s?' % args['plain_text_template'])
         try:
