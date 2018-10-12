@@ -2,7 +2,6 @@ from __future__ import print_function
 
 import csv
 import json
-from collections import namedtuple
 import os
 import sys
 import zlib
