@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-import StringIO
 import csv
 import json
 from collections import namedtuple
@@ -24,7 +23,7 @@ __version__ = '1.0'
 
 # Get Lambda environment variables
 region = os.environ['REGION']
-max_threads = os.environ['MAX_THREADS']
+max_threads = int(os.environ['MAX_THREADS'])
 from_domain = os.environ['SENDING_DOMAIN']
 
 # Initialise logging
@@ -36,6 +35,7 @@ logging.basicConfig(stream=sys.stdout,
 logger.info("Logging at {} level".format(os.environ['LOG_LEVEL']))
 
 # Initialise clients
+boto3.setup_default_session(profile_name='default')
 s3 = boto3.client('s3', region_name=region)
 ses = boto3.client('ses', region_name=region)
 mime_message_text = ''
@@ -103,10 +103,10 @@ def lambda_handler(event, context):
         if args.mailing_list:
             response = s3.get_object(Bucket=args.bucket, Key=args.mailing_list)
             body = zlib.decompress(response['Body'].read(), 16+zlib.MAX_WBITS)
-            reader = csv.DictReader(StringIO.StringIO(body),
-                                    fieldnames=['email_address', 'name'])
-            for row in reader:
-                recipients.append({row['email_address'].strip(), row['name'].strip()})
+            # reader = csv.DictReader(StringIO.StringIO(body),
+            #                         fieldnames=['email_address', 'name'])
+            # for row in reader:
+            #     recipients.append({row['email_address'].strip(), row['name'].strip()})
 
         # Read the message files
         try:
@@ -119,9 +119,10 @@ def lambda_handler(event, context):
             logger.info('Failed to read text message file. Did you upload %s?' % args.plain_text_template)
         try:
             response = s3.get_object(Bucket=args.bucket, Key=args.html_template)
-            mime_message_html = response['Body'].read()
-            t = Template(mime_message_html)
-            mime_message_html = t.render(args.template_variables)
+            mime_message_html = response['Body'].read().decode("utf-8")
+            if args.template_variables:
+                t = Template(mime_message_html)
+                mime_message_html = t.render(args.template_variables)
         except:
             mime_message_html = None
             logger.info('Failed to read html message file. Did you upload %s?' % args.html_template)
@@ -133,8 +134,10 @@ def lambda_handler(event, context):
         e = concurrent.futures.ThreadPoolExecutor(max_workers=max_threads)
         for recipient in recipients:
             from_address = "{}@{}".format(args.from_local_part, from_domain)
-            to_address = recipient['email_address']
+            to_address = recipient[0]
             subject = event['Records'][0]['Sns']['Subject']
+            t = Template(mime_message_html, variable_start_string='[[', variable_end_string=']]')
+            mime_message_html = t.render(recipient_name=recipient[1])
             message = mime_email(subject, from_address, to_address, mime_message_text, mime_message_html)
             e.submit(send_mail, from_address, to_address, message)
         e.shutdown()
