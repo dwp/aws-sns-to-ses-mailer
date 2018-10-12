@@ -34,7 +34,8 @@ logging.basicConfig(stream=sys.stdout,
 logger.info("Logging at {} level".format(os.environ['LOG_LEVEL']))
 
 # Initialise clients
-boto3.setup_default_session(profile_name='default')
+if 'AWS_PROFILE' in os.environ:
+    boto3.setup_default_session(profile_name=os.environ['AWS_PROFILE'])
 s3 = boto3.client('s3', region_name=region)
 ses = boto3.client('ses', region_name=region)
 mime_message_text = ''
