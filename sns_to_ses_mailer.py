@@ -13,7 +13,6 @@ from email.mime.text import MIMEText
 from jinja2 import Template
 
 import boto3
-from botocore.exceptions import ClientError
 import concurrent.futures
 
 __author__ = 'DWP DataWorks'
@@ -72,12 +71,8 @@ def send_mail(from_address, to_address, message):
         )
         if not isinstance(response, dict):  # log failed requests only
             logger.error('%s, Error sending to: %s, %s' % (current_time(), to_address, response))
-    except ClientError as e:
-        logger.error('%s, Error sending to: %s, %s, %s' %
-                     (current_time(),
-                      to_address,
-                      ', '.join("%s=%r" % (k, v) for (k, v) in e.response['ResponseMetadata'].iteritems()),
-                      e))
+    except Exception as e:
+        logger.error(f"Error sending to: {to_address}. Exception: {e}")
 
 
 def get_parameters(event):
