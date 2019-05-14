@@ -37,7 +37,7 @@ logger.info("Logging at {} level".format(os.environ['LOG_LEVEL']))
 if 'AWS_PROFILE' in os.environ:
     boto3.setup_default_session(profile_name=os.environ['AWS_PROFILE'])
 s3 = boto3.client('s3', region_name=region)
-ses = boto3.client('ses', region_name=ses_mailer_region)
+ses = boto3.client('ses', region_name=ses_mailer_region if ses_mailer_region else region)
 mime_message_text = ''
 mime_message_html = ''
 
