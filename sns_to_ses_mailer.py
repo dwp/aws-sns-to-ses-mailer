@@ -63,13 +63,14 @@ def mime_email(subject, from_address, to_address, cc_address=None, bcc_address=N
     return msg.as_string()
 
 
-def send_mail(from_address, to_address, message):
+def send_mail(from_address, to_address, cc_address, bcc_address, message):
     try:
+        dest = [to_address]
+        dest.append(cc_address) if cc_address is not None else None
+        dest.append(bcc_address) if bcc_address is not None else None
         response = ses.send_raw_email(
             Source=from_address,
-            Destinations=[
-                to_address,
-            ],
+            Destinations=dest,
             RawMessage={
                 'Data': message
             }
@@ -153,7 +154,7 @@ def lambda_handler(event, context):
                 mime_message_text = t.render(recipient_name=recipient['name'])
             message = mime_email(subject, from_address,
                                  to_address, cc_address, bcc_address, mime_message_text, mime_message_html)
-            e.submit(send_mail, from_address, to_address, message)
+            e.submit(send_mail, from_address, to_address, cc_address, bcc_address, message)
         e.shutdown()
     except Exception as e:
         logger.exception('Aborting... ' + str(e))
