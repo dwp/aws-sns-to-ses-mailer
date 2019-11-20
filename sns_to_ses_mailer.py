@@ -21,9 +21,13 @@ __version__ = '1.1'
 
 # Get Lambda environment variables
 region = os.environ['REGION']
-ses_mailer_region = os.environ['SES_MAILER_REGION']
 max_threads = int(os.environ['MAX_THREADS'])
 from_domain = os.environ['SENDING_DOMAIN']
+
+if 'SES_MAILER_REGION' in os.environ:
+    ses_mailer_region = os.environ['SES_MAILER_REGION']
+else:
+    ses_mailer_region = None
 
 # Initialise logging
 logger = logging.getLogger(__name__)
