@@ -1,0 +1,38 @@
+name: Perform Python Format
+
+on:
+  pull_request:
+    paths-ignore:
+      - '.circleci/**'
+      - '.github/workflows/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - name: Install Black
+        run: pip install black
+
+      - name: Run black --check .
+        id: check-formatting
+        run: black --check .
+        continue-on-error: true
+
+      - name: If needed, commit black changes to the pull request
+        if: ${{ steps.check-formatting.outcome == 'failure' }}
+        run: |
+          black .
+          git config --global user.name ${{ secrets.CI_GITHUB_USERNAME }}
+          git config --global user.email ${{ secrets.CI_GITHUB_EMAIL }}
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git checkout $GITHUB_HEAD_REF
+          git commit -am "Fixup: Format Python code with Black"
+          git push
