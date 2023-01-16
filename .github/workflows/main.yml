@@ -25,11 +25,11 @@ jobs:
           VERSION=$(echo $LATEST_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
           commit_message=$( echo "${{ github.event.head_commit.message }}" | sed 's/"//g')
           if [[ "${commit_message,,}" == *"major release"* ]]; then
-            echo "semver_increment='m'" >> $GITHUB_OUTPUT
+            echo "semver_increment=m" >> $GITHUB_OUTPUT
           elif [[ "${commit_message,,}" == *"minor release"* ]]; then
-            echo "semver_increment='i'" >> $GITHUB_OUTPUT
+            echo "semver_increment=i" >> $GITHUB_OUTPUT
           else
-            echo "semver_increment='p'" >> $GITHUB_OUTPUT
+            echo "semver_increment=p" >> $GITHUB_OUTPUT
           fi
 
       - name: Increment SemVer
