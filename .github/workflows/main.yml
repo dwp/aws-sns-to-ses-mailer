@@ -64,7 +64,7 @@ jobs:
             [  -z "$LATEST_VERSION" ] && LATEST_VERSION="0.0.0"
             VERSION=$(echo $LATEST_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
             VERSION_NUMBER=$(echo $VERSION | sed 's/^v\(.*\)$/\1/')
-            zip -r sns_to_ses_mailer.zip *
+            zip -r aws-sns-to-ses-mailer.zip *
       
       - name: Create Release
         id: create_release
@@ -77,12 +77,12 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: upload sns_to_ses_mailer.zip file
+      - name: upload aws-sns-to-ses-mailer.zip file
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifacts/sns_to_ses_mailer.zip
-          asset_name: sns_to_ses_mailer-${{ needs.get-publish-version.outputs.publish-version }}.zip
+          asset_name: aws-sns-to-ses-mailer-${{ needs.get-publish-version.outputs.publish-version }}.zip
           asset_content_type: application/gzip
