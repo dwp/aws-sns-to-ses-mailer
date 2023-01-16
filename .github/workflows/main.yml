@@ -83,6 +83,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/sns_to_ses_mailer.zip
+          asset_path: ./artifacts/aws-sns-to-ses-mailer.zip
           asset_name: aws-sns-to-ses-mailer-${{ needs.get-publish-version.outputs.publish-version }}.zip
           asset_content_type: application/gzip
