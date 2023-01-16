@@ -55,7 +55,9 @@ jobs:
       - name: install dependencies
         run: |
             mkdir artifacts
-            sudo pip install -r requirements.txt -t artifacts
+            sudo pip install -r requirements.txt
+            cp -r /usr/lib/python3/dist-packages/jinja2 artifacts/
+            cp -r /usr/lib/python3/dist-packages/markupsafe artifacts/
             cp sns_to_ses_mailer.py artifacts
             cd artifacts
             set +o pipefail
