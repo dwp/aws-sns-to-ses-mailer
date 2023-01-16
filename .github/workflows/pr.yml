@@ -3,7 +3,6 @@ name: Perform Python Format
 on:
   pull_request:
     paths-ignore:
-      - '.circleci/**'
       - '.github/workflows/**'
 
 jobs:
