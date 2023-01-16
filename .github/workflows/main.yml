@@ -28,7 +28,7 @@ jobs:
           else
             echo "semver_increment='p'" >> $GITHUB_OUTPUT
           fi
-      
+
       - name: Increment SemVer
         id: semver
         uses: matt-FFFFFF/simple-semver@v0.1.0
