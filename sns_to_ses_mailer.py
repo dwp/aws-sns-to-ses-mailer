@@ -103,7 +103,6 @@ def get_parameters(event):
 
 
 def lambda_handler(event, context):
-
     global mime_message_text
     global mime_message_html
     try:
